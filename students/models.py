@@ -1,9 +1,10 @@
 from django.db import models
 
 # Create your models here.
-class User(models.Model):
-    user_name = models.CharField(max_length=100,primary_key=True)
+class Student(models.Model):
+    username = models.CharField(max_length=100,primary_key=True)
     name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="students/", blank=True, null=True)
     father_name = models.CharField(max_length=100)
     roll_no = models.IntegerField(null=False, unique=True)
     class_name = models.CharField(max_length=100)
