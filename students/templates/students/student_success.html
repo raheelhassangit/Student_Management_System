@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}Student Added{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen flex items-center justify-center px-5 bg-gradient-to-br from-slate-100 via-blue-50 to-blue-100">
+
+  <div class="max-w-md w-full bg-white/85 backdrop-blur-md rounded-2xl shadow-xl p-10 text-center">
+
+    <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-600/30">
+      <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <h2 class="text-xl font-bold text-slate-800 mb-2">Successful...!</h2>
+    <p class="text-sm text-slate-500 mb-7">Student has been added successfully.</p>
+
+    <div class="flex gap-3">
+      <a href="{% url 'add_student' %}"
+        class="flex-1 px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-100 transition">
+        Add Another
+      </a>
+      <a href="{% url 'student_list' %}"
+        class="flex-1 px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold shadow-md shadow-blue-600/30 hover:brightness-105 transition">
+        View All Students
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}
