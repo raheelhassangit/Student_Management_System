@@ -144,13 +144,30 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const fields = document.querySelectorAll("#studentForm [required]");
 
-  fields.forEach(function (field) {
-    field.classList.add(
-      "w-full", "px-3", "py-2.5", "border", "border-slate-300", "rounded-lg",
-      "text-sm", "outline-none", "focus:border-blue-600", "focus:ring-4", "focus:ring-blue-600/10"
-    );
+  // Style all inputs — file inputs get Tailwind's file: variant, everything else gets the standard field look
+  document.querySelectorAll("#studentForm input, #studentForm select, #studentForm textarea").forEach(function (el) {
+    if (el.type === "file") {
+      el.classList.add(
+        "block", "w-full", "text-sm", "text-slate-600",
+        "file:mr-4", "file:py-2.5", "file:px-4",
+        "file:rounded-lg", "file:border-0",
+        "file:text-sm", "file:font-semibold",
+        "file:bg-blue-50", "file:text-blue-700",
+        "hover:file:bg-blue-100", "cursor-pointer"
+      );
+    } else {
+      el.classList.add(
+        "w-full", "px-3", "py-2.5", "border", "border-slate-300", "rounded-lg",
+        "text-sm", "outline-none", "focus:border-blue-600", "focus:ring-4", "focus:ring-blue-600/10"
+      );
+    }
+  });
+
+  // Live validation for required fields only
+  const requiredFields = document.querySelectorAll("#studentForm [required]");
+
+  requiredFields.forEach(function (field) {
     field.addEventListener("blur", function () { validate(field); });
     field.addEventListener("input", function () {
       if (field.dataset.touched) validate(field);
