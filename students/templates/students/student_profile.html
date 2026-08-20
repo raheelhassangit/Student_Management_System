@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}{{ student.name }} - Profile{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen py-12 px-5 bg-gradient-to-br from-slate-100 via-blue-50 to-blue-100">
+  <div class="max-w-2xl mx-auto bg-white/85 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden">
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-8 flex items-center gap-5">
+      {% if student.image %}
+        <img src="{{ student.image.url }}" alt="{{ student.name }}"
+          class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md">
+      {% else %}
+        <div class="w-20 h-20 rounded-full bg-white/20 border-2 border-white flex items-center justify-center text-white text-2xl font-bold">
+          {{ student.name|first|upper }}
+        </div>
+      {% endif %}
+
+      <div>
+        <h1 class="text-xl font-bold text-white">{{ student.name }}</h1>
+        <p class="text-blue-100 text-sm mt-1">Roll No: {{ student.roll_no }} · {{ student.class_name }}</p>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div class="px-8 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+
+        <div>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Username</p>
+          <p class="text-sm text-slate-800">{{ student.username }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Father's Name</p>
+          <p class="text-sm text-slate-800">{{ student.father_name }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Gender</p>
+          <p class="text-sm text-slate-800">{{ student.gender }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Date of Birth</p>
+          <p class="text-sm text-slate-800">{{ student.date_of_birth }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Phone</p>
+          <p class="text-sm text-slate-800">{{ student.phone }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Email</p>
+          <p class="text-sm text-slate-800">{{ student.email }}</p>
+        </div>
+
+        <div class="md:col-span-2">
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Address</p>
+          <p class="text-sm text-slate-800">{{ student.address }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Admission Date</p>
+          <p class="text-sm text-slate-800">{{ student.admission_date }}</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="border-t border-slate-200 bg-slate-50 px-8 py-4 flex justify-end">
+      <a href="{% url 'student_list' %}"
+        class="px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-100 transition">
+        Back to All Students
+      </a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
