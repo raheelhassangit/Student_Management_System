@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Student
+from .forms import AddStudent
 # Create your views here.
 
 def Dashboard(request):
@@ -8,3 +9,17 @@ def Dashboard(request):
 def student_list(request):
     students = Student.objects.all()
     return render(request, 'students/student_list.html', {'students': students})
+
+def add_student(request):
+    if request.method == "POST":
+        form = AddStudent(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect("student_success")
+    else:
+        form = AddStudent()  
+    
+    return render(request, 'students/add_student.html', {'add_student': form})      
+
+def success(request):
+    return render(request, 'students/student_success.html')

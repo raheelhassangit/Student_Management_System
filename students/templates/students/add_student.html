@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen py-12 px-5 bg-gradient-to-br from-slate-100 via-blue-50 to-blue-100">
+  <div class="max-w-3xl mx-auto bg-white/85 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden">
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-6">
+      <h1 class="text-xl font-bold">Add New Student</h1>
+      <p class="text-blue-100 text-sm mt-1">Enter the student's information below.</p>
+    </div>
+
+    <!-- Body -->
+    <div class="px-8 py-8">
+      <form method="POST" enctype="multipart/form-data" id="studentForm" novalidate>
+        {% csrf_token %}
+
+        {% if add_student.non_field_errors %}
+          <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 mb-5">
+            {% for error in add_student.non_field_errors %}{{ error }}{% endfor %}
+          </div>
+        {% endif %}
+
+        <!-- username + roll_no -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label for="{{ add_student.username.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Username <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.username }}
+            {% for error in add_student.username.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+          <div>
+            <label for="{{ add_student.roll_no.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Roll No <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.roll_no }}
+            {% for error in add_student.roll_no.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <!-- name + father_name -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label for="{{ add_student.name.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Name <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.name }}
+            {% for error in add_student.name.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+          <div>
+            <label for="{{ add_student.father_name.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Father's Name <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.father_name }}
+            {% for error in add_student.father_name.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <!-- class_name + gender -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label for="{{ add_student.class_name.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Class <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.class_name }}
+            {% for error in add_student.class_name.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+          <div>
+            <label for="{{ add_student.gender.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Gender <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.gender }}
+            {% for error in add_student.gender.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <!-- date_of_birth + phone -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label for="{{ add_student.date_of_birth.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Date of Birth <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.date_of_birth }}
+            {% for error in add_student.date_of_birth.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+          <div>
+            <label for="{{ add_student.phone.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Phone <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.phone }}
+            {% for error in add_student.phone.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
+
+        <!-- email -->
+        <div class="mb-5">
+          <label for="{{ add_student.email.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+            Email <span class="text-red-600">*</span>
+          </label>
+          {{ add_student.email }}
+          {% for error in add_student.email.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+        </div>
+
+        <!-- address -->
+        <div class="mb-5">
+          <label for="{{ add_student.address.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+            Address <span class="text-red-600">*</span>
+          </label>
+          {{ add_student.address }}
+          {% for error in add_student.address.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+        </div>
+
+        <!-- image -->
+        <div class="mb-2">
+          <label for="{{ add_student.image.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+            Photo <span class="text-slate-500 font-normal text-xs">(optional)</span>
+          </label>
+          {{ add_student.image }}
+          {% for error in add_student.image.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="border-t border-slate-200 bg-slate-50 px-8 py-4 flex justify-end gap-3">
+      <button type="reset" form="studentForm"
+        class="px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-100 transition">
+        Reset
+      </button>
+      <button type="submit" form="studentForm"
+        class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold shadow-md shadow-blue-600/30 hover:brightness-105 transition">
+        Add Student
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const fields = document.querySelectorAll("#studentForm [required]");
+
+  fields.forEach(function (field) {
+    field.classList.add(
+      "w-full", "px-3", "py-2.5", "border", "border-slate-300", "rounded-lg",
+      "text-sm", "outline-none", "focus:border-blue-600", "focus:ring-4", "focus:ring-blue-600/10"
+    );
+    field.addEventListener("blur", function () { validate(field); });
+    field.addEventListener("input", function () {
+      if (field.dataset.touched) validate(field);
+    });
+  });
+
+  function validate(field) {
+    field.dataset.touched = "true";
+    let msg = field.parentElement.querySelector(".live-error");
+
+    if (!field.value.trim()) {
+      if (!msg) {
+        msg = document.createElement("span");
+        msg.className = "block text-red-600 text-xs mt-1 live-error";
+        msg.textContent = "This field is required.";
+        field.insertAdjacentElement("afterend", msg);
+      }
+      field.classList.add("border-red-600");
+    } else {
+      if (msg) msg.remove();
+      field.classList.remove("border-red-600");
+    }
+  }
+});
+</script>
+
+{% endblock %}
