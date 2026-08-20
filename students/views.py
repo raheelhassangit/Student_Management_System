@@ -7,4 +7,4 @@ def Dashboard(request):
 
 def student_list(request):
     students = Student.objects.all()
-    return render(request, 'core/student_list.html', {'students': students})
+    return render(request, 'students/student_list.html', {'students': students})
