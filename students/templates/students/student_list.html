@@ -122,7 +122,11 @@
                     <div class="no-img">{{ student.name|first|upper }}</div>
                   {% endif %}
                 </td>
-                <td>{{ student.username }}</td>
+                <td>
+  <a href="{% url 'student_profile' student.username %}" class="text-blue-600 font-semibold hover:underline">
+    {{ student.name }}
+  </a>
+</td>
                 <td>{{ student.name }}</td>
                 <td>{{ student.father_name }}</td>
                 <td>{{ student.roll_no }}</td>

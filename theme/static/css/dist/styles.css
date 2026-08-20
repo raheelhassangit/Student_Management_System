@@ -475,6 +475,9 @@
   .text-blue-100 {
     color: var(--color-blue-100);
   }
+  .text-blue-600 {
+    color: var(--color-blue-600);
+  }
   .text-red-600 {
     color: var(--color-red-600);
   }
@@ -604,6 +607,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-slate-100);
+      }
+    }
+  }
+  .hover\:underline {
+    &:hover {
+      @media (hover: hover) {
+        text-decoration-line: underline;
       }
     }
   }
