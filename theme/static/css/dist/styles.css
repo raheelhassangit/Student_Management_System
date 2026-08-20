@@ -20,6 +20,7 @@
     --color-slate-100: oklch(96.8% 0.007 247.896);
     --color-slate-200: oklch(92.9% 0.013 255.508);
     --color-slate-300: oklch(86.9% 0.022 252.894);
+    --color-slate-400: oklch(70.4% 0.04 256.788);
     --color-slate-500: oklch(55.4% 0.046 257.417);
     --color-slate-600: oklch(44.6% 0.043 257.281);
     --color-slate-700: oklch(37.2% 0.044 257.287);
@@ -447,6 +448,9 @@
   .px-8 {
     padding-inline: calc(var(--spacing) * 8);
   }
+  .px-15 {
+    padding-inline: calc(var(--spacing) * 15);
+  }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
   }
@@ -458,6 +462,9 @@
   }
   .py-4 {
     padding-block: calc(var(--spacing) * 4);
+  }
+  .py-5 {
+    padding-block: calc(var(--spacing) * 5);
   }
   .py-6 {
     padding-block: calc(var(--spacing) * 6);
@@ -532,6 +539,9 @@
   }
   .text-red-700 {
     color: var(--color-red-700);
+  }
+  .text-slate-400 {
+    color: var(--color-slate-400);
   }
   .text-slate-500 {
     color: var(--color-slate-500);

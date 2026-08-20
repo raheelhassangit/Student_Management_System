@@ -53,5 +53,6 @@ def edit_student(request, username):
                 return redirect('student_profile', username=new_username)
     else:
         form = AddStudent(instance=student)
+        form.fields['roll_no'].disabled = True
 
     return render(request, 'students/edit_student.html', {'add_student': form, 'student': student})

@@ -78,9 +78,13 @@
         class="px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-100 transition">
         Back to All Students
       </a>
+      <a href="{% url 'edit_student' student.username %}"
+      class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold shadow-md shadow-blue-600/30 hover:brightness-105 transition">
+      Edit Student
+    </a>
     </div>
-
   </div>
+
 </div>
 
 {% endblock %}
