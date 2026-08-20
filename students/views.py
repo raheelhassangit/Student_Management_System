@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Student
 from .forms import AddStudent
 # Create your views here.
@@ -23,3 +23,7 @@ def add_student(request):
 
 def success(request):
     return render(request, 'students/student_success.html')
+
+def student_profile(request, username):
+    student = get_object_or_404(Student, username=username)
+    return render(request, 'students/student_profile.html', {'student': student})
