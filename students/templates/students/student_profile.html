@@ -73,16 +73,22 @@
     </div>
 
     <!-- Footer -->
-    <div class="border-t border-slate-200 bg-slate-50 px-8 py-4 flex justify-end">
-      <a href="{% url 'student_list' %}"
-        class="px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-100 transition">
-        Back to All Students
-      </a>
-      <a href="{% url 'edit_student' student.username %}"
-      class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold shadow-md shadow-blue-600/30 hover:brightness-105 transition">
-      Edit Student
-    </a>
-    </div>
+<div class="border-t border-slate-200 bg-slate-50 px-8 py-4 flex flex-wrap justify-end gap-3">
+  <a href="{% url 'student_list' %}"
+    class="px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-100 transition">
+    Back to All Students
+  </a>
+
+  <a href="{% url 'edit_student' student.username %}"
+    class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-semibold shadow-md shadow-blue-600/30 hover:brightness-105 transition">
+    Edit Student
+  </a>
+
+  <a href="{% url 'delete_student' student.username %}"
+    class="px-5 py-2.5 rounded-lg border border-red-300 text-red-600 text-sm font-semibold hover:bg-red-50 transition">
+    Delete
+  </a>
+</div>
   </div>
 
 </div>
