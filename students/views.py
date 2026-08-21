@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
-from .models import Student
+from .models import Student, Attendance
 from .forms import AddStudent
 from django.db.models import Count
 from django.utils import timezone
 import datetime
+from django.contrib import messages
+from .forms import AttendanceDateForm
+
 # Create your views here.
 
 def Dashboard(request):
@@ -88,3 +91,33 @@ def dashboard(request):
         'by_class': by_class,  # [{'class_name': 'BS CS', 'count': 45}, ...]
     }
     return render(request, 'students/dashboard.html', context)
+
+
+def mark_attendance(request):
+    selected_date = request.GET.get('date') or request.POST.get('date') or timezone.now().date().isoformat()
+    students = Student.objects.all().order_by('roll_no')
+
+    # Pull existing records for this date so the form pre-fills if you're re-opening it
+    existing = {
+        a.student_id: a.status
+        for a in Attendance.objects.filter(date=selected_date)
+    }
+
+    if request.method == "POST":
+        for student in students:
+            status = request.POST.get(f"status_{student.username}")
+            if status:
+                Attendance.objects.update_or_create(
+                    student=student,
+                    date=selected_date,
+                    defaults={"status": status}
+                )
+        messages.success(request, f"Attendance saved for {selected_date}.")
+        return redirect(f"/attendance/mark/?date={selected_date}")
+
+    context = {
+        'students': students,
+        'selected_date': selected_date,
+        'existing': existing,
+    }
+    return render(request, 'students/mark_attendance.html', context)
