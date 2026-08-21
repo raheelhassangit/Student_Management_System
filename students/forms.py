@@ -19,3 +19,10 @@ class AddStudent(forms.ModelForm):
             'phone',
             'email',
         ]
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
+        }
+
+class AttendanceDateForm(forms.Form):
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))        

@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
 from .models import Student
 from .forms import AddStudent
+from django.db.models import Count
+from django.utils import timezone
+import datetime
 # Create your views here.
 
 def Dashboard(request):
@@ -65,3 +68,23 @@ def delete_student(request, username):
         return redirect('student_list')
 
     return render(request, 'students/delete_student.html', {'student': student})
+
+
+def dashboard(request):
+    students = Student.objects.all()
+    total_students = students.count()
+
+    recent_students = students.order_by('-admission_date')[:5]
+
+    by_class = (
+        students.values('class_name')
+        .annotate(count=Count('username'))
+        .order_by('-count')
+    )
+
+    context = {
+        'total_students': total_students,
+        'recent_students': recent_students,
+        'by_class': by_class,  # [{'class_name': 'BS CS', 'count': 45}, ...]
+    }
+    return render(request, 'students/dashboard.html', context)
