@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}Mark Attendance{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+  <h1 class="text-xl font-bold text-slate-800">Mark Attendance</h1>
+
+  <form method="GET" class="flex items-center gap-2">
+    <input type="date" name="date" value="{{ selected_date }}"
+      onchange="this.form.submit()"
+      class="px-3.5 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/10">
+  </form>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-3 mb-5">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+  <form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="date" value="{{ selected_date }}">
+
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-slate-200 bg-slate-50">
+          <th class="text-left px-6 py-3 font-semibold text-slate-600">Student</th>
+          <th class="text-left px-6 py-3 font-semibold text-slate-600">Class</th>
+          <th class="text-left px-6 py-3 font-semibold text-slate-600">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+          <tr class="border-b border-slate-100">
+            <td class="px-6 py-3 flex items-center gap-3">
+              {% if student.image %}
+                <img src="{{ student.image.url }}" class="w-8 h-8 rounded-full object-cover">
+              {% else %}
+                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
+                  {{ student.name|first|upper }}
+                </div>
+              {% endif %}
+              <span class="font-medium text-slate-800">{{ student.name }}</span>
+            </td>
+            <td class="px-6 py-3 text-slate-600">{{ student.class_name }}</td>
+            <td class="px-6 py-3">
+              <div class="flex gap-4">
+                {% for value, label in student.get_status_choices %}{% endfor %}
+                <label class="flex items-center gap-1.5 text-sm text-slate-700">
+                  <input type="radio" name="status_{{ student.username }}" value="Present"
+                    {% if existing|get_item:student.username == "Present" or not existing|get_item:student.username %}checked{% endif %}>
+                  Present
+                </label>
+                <label class="flex items-center gap-1.5 text-sm text-slate-700">
+                  <input type="radio" name="status_{{ student.username }}" value="Absent"
+                    {% if existing|get_item:student.username == "Absent" %}checked{% endif %}>
+                  Absent
+                </label>
+                <label class="flex items-center gap-1.5 text-sm text-slate-700">
+                  <input type="radio" name="status_{{ student.username }}" value="Leave"
+                    {% if existing|get_item:student.username == "Leave" %}checked{% endif %}>
+                  Leave
+                </label>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="3" class="px-6 py-8 text-center text-slate-400">No students found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end">
+      <button type="submit" class="px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+        Save Attendance
+      </button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
