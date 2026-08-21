@@ -56,3 +56,12 @@ def edit_student(request, username):
         form.fields['roll_no'].disabled = True
 
     return render(request, 'students/edit_student.html', {'add_student': form, 'student': student})
+
+def delete_student(request, username):
+    student = get_object_or_404(Student, username=username)
+
+    if request.method == "POST":
+        student.delete()
+        return redirect('student_list')
+
+    return render(request, 'students/delete_student.html', {'student': student})
