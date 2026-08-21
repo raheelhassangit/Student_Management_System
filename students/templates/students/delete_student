@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}Delete Student{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen flex items-center justify-center px-5 bg-gradient-to-br from-slate-100 via-blue-50 to-blue-100">
+
+  <div class="max-w-md w-full bg-white/85 backdrop-blur-md rounded-2xl shadow-xl p-10 text-center">
+
+    <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-red-100 flex items-center justify-center">
+      <svg class="w-8 h-8 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 6L5 18M5 6l14 12"/>
+      </svg>
+    </div>
+
+    <h2 class="text-xl font-bold text-slate-800 mb-2">Delete Student?</h2>
+    <p class="text-sm text-slate-500 mb-7">
+      Are you sure you want to delete <strong>{{ student.name }}</strong> ({{ student.username }})?
+      This action cannot be undone.
+    </p>
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="flex gap-3">
+        <a href="{% url 'student_profile' student.username %}"
+          class="flex-1 px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-100 transition">
+          Cancel
+        </a>
+        <button type="submit"
+          class="flex-1 px-5 py-2.5 rounded-lg bg-red-600 text-white text-sm font-semibold shadow-md shadow-red-600/30 hover:bg-red-700 transition">
+          Delete
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}
