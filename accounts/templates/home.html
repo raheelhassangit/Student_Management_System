@@ -1,0 +1,37 @@
+{% load tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management System</title>
+  {% tailwind_css %}
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-blue-50 to-blue-100 px-5">
+
+  <div class="max-w-md w-full bg-white/85 backdrop-blur-md rounded-2xl shadow-xl p-10 text-center">
+
+    <div class="w-14 h-14 mx-auto mb-5 rounded-xl bg-blue-600 flex items-center justify-center">
+      <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
+      </svg>
+    </div>
+
+    <h1 class="text-xl font-bold text-slate-800 mb-2">Student Management System</h1>
+    <p class="text-sm text-slate-500 mb-8">Sign in to manage students, attendance, and more.</p>
+
+    <div class="flex flex-col gap-3">
+      <a href="{% url 'login' %}"
+        class="w-full px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+        Login
+      </a>
+      <a href="{% url 'register' %}"
+        class="w-full px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-50 transition">
+        Register
+      </a>
+    </div>
+
+  </div>
+
+</body>
+</html>
