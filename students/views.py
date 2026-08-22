@@ -7,11 +7,9 @@ from django.utils import timezone
 import datetime
 from django.contrib import messages
 from .forms import AttendanceDateForm
+from django.urls import reverse
 
 # Create your views here.
-
-def Dashboard(request):
-    return render(request, 'students/Dashboard.html')
 
 def student_list(request):
     students = Student.objects.all()
@@ -33,7 +31,11 @@ def success(request):
 
 def student_profile(request, username):
     student = get_object_or_404(Student, username=username)
-    return render(request, 'students/student_profile.html', {'student': student})
+    attendance_history = student.attendances.all()[:15]  # most recent 15, thanks to Meta.ordering
+    return render(request, 'students/student_profile.html', {
+        'student': student,
+        'attendance_history': attendance_history,
+    })
 
 def edit_student(request, username):
     student = get_object_or_404(Student, username=username)
@@ -76,7 +78,6 @@ def delete_student(request, username):
 def dashboard(request):
     students = Student.objects.all()
     total_students = students.count()
-
     recent_students = students.order_by('-admission_date')[:5]
 
     by_class = (
@@ -84,11 +85,15 @@ def dashboard(request):
         .annotate(count=Count('username'))
         .order_by('-count')
     )
+    total_records = Attendance.objects.count()
+    present_records = Attendance.objects.filter(status="Present").count()
+    attendance_rate = round((present_records / total_records) * 100, 1) if total_records else None
 
     context = {
         'total_students': total_students,
         'recent_students': recent_students,
-        'by_class': by_class,  # [{'class_name': 'BS CS', 'count': 45}, ...]
+        'by_class': by_class,
+        'attendance_rate': attendance_rate,
     }
     return render(request, 'students/dashboard.html', context)
 
@@ -97,7 +102,6 @@ def mark_attendance(request):
     selected_date = request.GET.get('date') or request.POST.get('date') or timezone.now().date().isoformat()
     students = Student.objects.all().order_by('roll_no')
 
-    # Pull existing records for this date so the form pre-fills if you're re-opening it
     existing = {
         a.student_id: a.status
         for a in Attendance.objects.filter(date=selected_date)
@@ -113,7 +117,7 @@ def mark_attendance(request):
                     defaults={"status": status}
                 )
         messages.success(request, f"Attendance saved for {selected_date}.")
-        return redirect(f"/attendance/mark/?date={selected_date}")
+        return redirect(f"{reverse('mark_attendance')}?date={selected_date}")
 
     context = {
         'students': students,

@@ -8,7 +8,7 @@
 <!-- Welcome row -->
 <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
   <div>
-    <h1 class="text-xl font-bold text-slate-800">👋 Welcome back, Admin!</h1>
+    <h1 class="text-xl font-bold text-slate-800">Welcome back, Admin!</h1>
     <p class="text-sm text-slate-500 mt-1">Here's what's happening with your school today.</p>
   </div>
   <div class="flex items-center gap-2 px-4 py-2 border border-slate-300 rounded-lg bg-white text-sm text-slate-600">
@@ -37,11 +37,13 @@
   </div>
 
   <div class="bg-purple-50 border border-purple-100 rounded-xl p-5">
-    <div class="w-11 h-11 bg-purple-600 rounded-full flex items-center justify-center mb-3">
-      <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-    </div>
-    <p class="text-2xl font-bold text-slate-800">—</p>
-    <p class="text-sm text-slate-500">Attendance Rate</p>
+  <div class="w-11 h-11 bg-purple-600 rounded-full flex items-center justify-center mb-3">
+    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+  </div>
+  <p class="text-2xl font-bold text-slate-800">
+    {% if attendance_rate is not None %}{{ attendance_rate }}%{% else %}—{% endif %}
+  </p>
+  <p class="text-sm text-slate-500">Attendance Rate</p>
   </div>
 
   <div class="bg-amber-50 border border-amber-100 rounded-xl p-5">
