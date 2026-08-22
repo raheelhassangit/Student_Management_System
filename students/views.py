@@ -9,6 +9,8 @@ from django.contrib import messages
 from .forms import AttendanceDateForm
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from dateutil.relativedelta import relativedelta
+from django.db.models.functions import TruncMonth
 
 # Create your views here.
 @login_required
@@ -80,8 +82,12 @@ def delete_student(request, username):
 
     return render(request, 'students/delete_student.html', {'student': student})
 
+
+
 @login_required
+
 def dashboard(request):
+
     students = Student.objects.all()
     total_students = students.count()
     recent_students = students.order_by('-admission_date')[:5]
@@ -91,16 +97,34 @@ def dashboard(request):
         .annotate(count=Count('username'))
         .order_by('-count')
     )
+
     total_records = Attendance.objects.count()
     present_records = Attendance.objects.filter(status="Present").count()
     attendance_rate = round((present_records / total_records) * 100, 1) if total_records else None
 
+    # Build the last 6 calendar months explicitly, even if empty
+
+    today = timezone.now().date().replace(day=1)
+    months = [today - relativedelta(months=i) for i in range(5, -1, -1)]  # oldest → newest
+    monthly_counts = (
+        students.filter(admission_date__gte=months[0])
+        .annotate(month=TruncMonth('admission_date'))
+        .values('month')
+        .annotate(count=Count('username'))
+    )
+
+    counts_by_month = {m['month'].strftime('%Y-%m'): m['count'] for m in monthly_counts}
+    enrollment_labels = [m.strftime('%b') for m in months]
+    enrollment_data = [counts_by_month.get(m.strftime('%Y-%m'), 0) for m in months]
     context = {
         'total_students': total_students,
         'recent_students': recent_students,
         'by_class': by_class,
         'attendance_rate': attendance_rate,
+        'enrollment_labels': enrollment_labels,
+        'enrollment_data': enrollment_data,
     }
+
     return render(request, 'students/dashboard.html', context)
 
 @login_required

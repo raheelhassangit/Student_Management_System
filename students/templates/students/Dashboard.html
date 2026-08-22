@@ -8,7 +8,7 @@
 <!-- Welcome row -->
 <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
   <div>
-    <h1 class="text-xl font-bold text-slate-800">Welcome back, Admin!</h1>
+    <h1 class="text-xl font-bold text-slate-800">Welcome back, {{ request.user.username }}!</h1>
     <p class="text-sm text-slate-500 mt-1">Here's what's happening with your school today.</p>
   </div>
   <div class="flex items-center gap-2 px-4 py-2 border border-slate-300 rounded-lg bg-white text-sm text-slate-600">
@@ -37,13 +37,13 @@
   </div>
 
   <div class="bg-purple-50 border border-purple-100 rounded-xl p-5">
-  <div class="w-11 h-11 bg-purple-600 rounded-full flex items-center justify-center mb-3">
-    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-  </div>
-  <p class="text-2xl font-bold text-slate-800">
-    {% if attendance_rate is not None %}{{ attendance_rate }}%{% else %}—{% endif %}
-  </p>
-  <p class="text-sm text-slate-500">Attendance Rate</p>
+    <div class="w-11 h-11 bg-purple-600 rounded-full flex items-center justify-center mb-3">
+      <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    </div>
+    <p class="text-2xl font-bold text-slate-800">
+      {% if attendance_rate is not None %}{{ attendance_rate }}%{% else %}—{% endif %}
+    </p>
+    <p class="text-sm text-slate-500">Attendance Rate</p>
   </div>
 
   <div class="bg-amber-50 border border-amber-100 rounded-xl p-5">
@@ -95,19 +95,24 @@
 <!-- Donut + quick actions -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-  <div class="bg-white border border-slate-200 rounded-xl p-6">
+  <div class="bg-white border border-slate-200 rounded-xl p-6 overflow-hidden">
     <h2 class="text-base font-bold text-slate-800 mb-4">Students by Class</h2>
     <div class="flex items-center gap-6">
-      <canvas id="classChart" width="140" height="140"></canvas>
-      <div class="space-y-2 text-sm">
+
+      <div class="w-32 h-32 flex-shrink-0">
+        <canvas id="classChart"></canvas>
+      </div>
+
+      <div class="space-y-2 text-sm min-w-0 flex-1" id="classLegend">
         {% for c in by_class %}
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full" style="background:{{ forloop.counter0|yesno:'#3b82f6,#22c55e,#f59e0b,#a855f7,#ef4444' }}"></span>
-            <span class="text-slate-600">{{ c.class_name }}</span>
-            <span class="font-semibold text-slate-800">{{ c.count }}</span>
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 legend-dot"></span>
+            <span class="text-slate-600 truncate" title="{{ c.class_name }}">{{ c.class_name }}</span>
+            <span class="font-semibold text-slate-800 flex-shrink-0 ml-auto">{{ c.count }}</span>
           </div>
         {% endfor %}
       </div>
+
     </div>
   </div>
 
@@ -135,6 +140,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
+  const chartColors = ['#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#ef4444'];
+
   // Students by class — donut
   new Chart(document.getElementById('classChart'), {
     type: 'doughnut',
@@ -142,24 +149,31 @@
       labels: [{% for c in by_class %}"{{ c.class_name }}",{% endfor %}],
       datasets: [{
         data: [{% for c in by_class %}{{ c.count }},{% endfor %}],
-        backgroundColor: ['#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#ef4444'],
+        backgroundColor: chartColors,
         borderWidth: 0,
       }]
     },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       cutout: '70%',
       plugins: { legend: { display: false } }
     }
   });
 
-  // Enrollment overview — placeholder monthly trend (wire to real signup dates once you track them)
+  // Match legend dot colors to the exact same array used above, by real index
+  document.querySelectorAll('#classLegend .legend-dot').forEach(function (dot, i) {
+    dot.style.background = chartColors[i % chartColors.length];
+  });
+
+  // Enrollment overview — real monthly counts from the view
   new Chart(document.getElementById('enrollmentChart'), {
     type: 'line',
     data: {
-      labels: ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May'],
+      labels: [{% for l in enrollment_labels %}"{{ l }}",{% endfor %}],
       datasets: [{
-        label: 'Students',
-        data: [60, 75, 85, 90, 105, {{ total_students }}],
+        label: 'New Students',
+        data: [{% for d in enrollment_data %}{{ d }},{% endfor %}],
         borderColor: '#2563eb',
         backgroundColor: 'rgba(37,99,235,0.08)',
         fill: true,
