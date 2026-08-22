@@ -8,13 +8,15 @@ import datetime
 from django.contrib import messages
 from .forms import AttendanceDateForm
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required
 def student_list(request):
     students = Student.objects.all()
     return render(request, 'students/student_list.html', {'students': students})
 
+@login_required
 def add_student(request):
     if request.method == "POST":
         form = AddStudent(request.POST, request.FILES)
@@ -26,9 +28,11 @@ def add_student(request):
     
     return render(request, 'students/add_student.html', {'add_student': form})      
 
+@login_required
 def success(request):
     return render(request, 'students/student_success.html')
 
+@login_required
 def student_profile(request, username):
     student = get_object_or_404(Student, username=username)
     attendance_history = student.attendances.all()[:15]  # most recent 15, thanks to Meta.ordering
@@ -37,6 +41,7 @@ def student_profile(request, username):
         'attendance_history': attendance_history,
     })
 
+@login_required
 def edit_student(request, username):
     student = get_object_or_404(Student, username=username)
 
@@ -65,6 +70,7 @@ def edit_student(request, username):
 
     return render(request, 'students/edit_student.html', {'add_student': form, 'student': student})
 
+@login_required
 def delete_student(request, username):
     student = get_object_or_404(Student, username=username)
 
@@ -74,7 +80,7 @@ def delete_student(request, username):
 
     return render(request, 'students/delete_student.html', {'student': student})
 
-
+@login_required
 def dashboard(request):
     students = Student.objects.all()
     total_students = students.count()
@@ -97,7 +103,7 @@ def dashboard(request):
     }
     return render(request, 'students/dashboard.html', context)
 
-
+@login_required
 def mark_attendance(request):
     selected_date = request.GET.get('date') or request.POST.get('date') or timezone.now().date().isoformat()
     students = Student.objects.all().order_by('roll_no')
