@@ -1,5 +1,5 @@
 from django import forms
-from .models import Student
+from .models import Student, Course
 
 
 class AddStudent(forms.ModelForm):
@@ -26,3 +26,8 @@ class AddStudent(forms.ModelForm):
 
 class AttendanceDateForm(forms.Form):
     date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))        
+    
+class AddCourse(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ['name', 'code', 'duration_years', 'description']    
