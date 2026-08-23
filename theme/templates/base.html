@@ -49,10 +49,27 @@
         </div>
       </div>
 
-      <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        Courses
-      </a>
+      <div>
+        <button type="button" onclick="document.getElementById('coursesMenu').classList.toggle('hidden')"
+          class="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
+          <span class="flex items-center gap-3">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Courses
+          </span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div id="coursesMenu" class="mt-1 ml-4 pl-4 border-l border-slate-700 space-y-1">
+          <a href="{% url 'course_list' %}"
+            class="block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition {% if request.resolver_match.url_name == 'course_list' %}bg-slate-800 text-white{% endif %}">
+            All Courses
+          </a>
+          <a href="{% url 'add_course' %}"
+            class="block px-3 py-2 rounded-lg transition {% if request.resolver_match.url_name == 'add_course' %}bg-blue-600 text-white{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
+            Add Course
+          </a>
+        </div>
+      </div>
+
       <a href="{% url 'mark_attendance' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition">
         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Attendance
