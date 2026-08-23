@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+  <div>
+    <h1 class="text-xl font-bold text-slate-800">Courses</h1>
+    <p class="text-sm text-slate-500 mt-1">{{ courses|length }} course{{ courses|length|pluralize }} offered</p>
+  </div>
+  <a href="{% url 'add_course' %}"
+    class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Add Course
+  </a>
+</div>
+
+{% if courses %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    {% for course in courses %}
+      <div class="bg-white border border-slate-200 rounded-xl p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">{{ course.code }}</span>
+          <span class="text-xs text-slate-400">{{ course.duration_years }} yr{{ course.duration_years|pluralize }}</span>
+        </div>
+        <h3 class="text-base font-bold text-slate-800 mb-1">{{ course.name }}</h3>
+        <p class="text-sm text-slate-500 line-clamp-2">{{ course.description|default:"No description added." }}</p>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="bg-white border border-slate-200 rounded-xl p-12 text-center">
+    <p class="text-slate-400 text-sm">No courses added yet.</p>
+  </div>
+{% endif %}
+
+{% endblock %}
