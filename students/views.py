@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
-from .models import Student, Attendance
-from .forms import AddStudent
+from .models import Student, Attendance, Course
+from .forms import AddStudent, AddCourse
 from django.db.models import Count
 from django.utils import timezone
 import datetime
@@ -155,3 +155,19 @@ def mark_attendance(request):
         'existing': existing,
     }
     return render(request, 'students/mark_attendance.html', context)
+
+@login_required
+def course_list(request):
+    courses = Course.objects.all()
+    return render(request, 'students/course_list.html', {'courses': courses})
+
+@login_required
+def add_course(request):
+    if request.method == "POST":
+        form = AddCourse(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('course_list')
+    else:
+        form = AddCourse()
+    return render(request, 'students/add_course.html', {'add_course': form})
