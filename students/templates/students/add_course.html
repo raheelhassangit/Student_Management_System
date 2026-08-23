@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}Add Course{% endblock %}
+
+{% block content %}
+
+<div class="text-sm mb-4">
+  <a href="{% url 'dashboard' %}" class="text-blue-600 hover:underline">Dashboard</a>
+  <span class="text-slate-400 mx-1">/</span>
+  <a href="{% url 'course_list' %}" class="text-blue-600 hover:underline">Courses</a>
+  <span class="text-slate-400 mx-1">/</span>
+  <span class="text-slate-500">Add Course</span>
+</div>
+
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm max-w-2xl">
+  <div class="px-8 py-6 border-b border-slate-100">
+    <h1 class="text-xl font-bold text-slate-800">Add New Course</h1>
+  </div>
+
+  <form method="POST" id="courseForm" novalidate class="px-8 py-6">
+    {% csrf_token %}
+
+    {% if add_course.non_field_errors %}
+      <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 mb-6">
+        {% for error in add_course.non_field_errors %}{{ error }}{% endfor %}
+      </div>
+    {% endif %}
+
+    {% for field in add_course %}
+      <div class="flex items-start gap-6 py-4 {% if not forloop.first %}border-t border-slate-100{% endif %}">
+        <label for="{{ field.id_for_label }}" class="w-40 flex-shrink-0 pt-2.5 text-sm font-semibold text-slate-700">
+          {{ field.label }}
+          {% if field.field.required %}<span class="text-red-600">*</span>{% endif %}
+        </label>
+        <div class="flex-1">
+          {{ field }}
+          {% for error in field.errors %}
+            <span class="block text-red-600 text-xs mt-1">{{ error }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="flex items-center gap-3 pt-6 mt-2 border-t border-slate-100">
+      <button type="submit"
+        class="px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+        Add Course
+      </button>
+      <a href="{% url 'course_list' %}"
+        class="px-5 py-2.5 rounded-lg border border-slate-300 bg-white text-slate-700 text-sm font-semibold hover:bg-slate-50 transition">
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("#courseForm input, #courseForm textarea").forEach(function (el) {
+    el.classList.add("w-full", "px-3.5", "py-2.5", "border", "border-slate-300", "rounded-lg",
+      "text-sm", "outline-none", "focus:border-blue-600", "focus:ring-4", "focus:ring-blue-600/10");
+  });
+});
+</script>
+
+{% endblock %}
