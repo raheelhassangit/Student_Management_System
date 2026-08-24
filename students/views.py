@@ -85,77 +85,49 @@ def delete_student(request, username):
 
 
 @login_required
-
 def dashboard(request):
-
     students = Student.objects.all()
     total_students = students.count()
     recent_students = students.order_by('-admission_date')[:5]
 
+    # Donut: group by class_name (always populated)
     by_class = (
-    students.exclude(course__isnull=True)
-    .values('course__name')
-    .annotate(count=Count('username'))
-    .order_by('-count')
+        students.exclude(class_name__exact='')
+        .values('class_name')
+        .annotate(count=Count('username'))
+        .order_by('-count')
     )
+
+    total_courses = Course.objects.count()
 
     total_records = Attendance.objects.count()
     present_records = Attendance.objects.filter(status="Present").count()
     attendance_rate = round((present_records / total_records) * 100, 1) if total_records else None
 
-    # Build the last 6 calendar months explicitly, even if empty
-
     today = timezone.now().date().replace(day=1)
-    months = [today - relativedelta(months=i) for i in range(5, -1, -1)]  # oldest → newest
+    months = [today - relativedelta(months=i) for i in range(5, -1, -1)]
+
     monthly_counts = (
         students.filter(admission_date__gte=months[0])
         .annotate(month=TruncMonth('admission_date'))
         .values('month')
         .annotate(count=Count('username'))
     )
-
     counts_by_month = {m['month'].strftime('%Y-%m'): m['count'] for m in monthly_counts}
+
     enrollment_labels = [m.strftime('%b') for m in months]
     enrollment_data = [counts_by_month.get(m.strftime('%Y-%m'), 0) for m in months]
+
     context = {
         'total_students': total_students,
         'recent_students': recent_students,
         'by_class': by_class,
+        'total_courses': total_courses,
         'attendance_rate': attendance_rate,
         'enrollment_labels': enrollment_labels,
         'enrollment_data': enrollment_data,
     }
-
     return render(request, 'students/dashboard.html', context)
-
-@login_required
-def mark_attendance(request):
-    selected_date = request.GET.get('date') or request.POST.get('date') or timezone.now().date().isoformat()
-    students = Student.objects.all().order_by('roll_no')
-
-    existing = {
-        a.student_id: a.status
-        for a in Attendance.objects.filter(date=selected_date)
-    }
-
-    if request.method == "POST":
-        for student in students:
-            status = request.POST.get(f"status_{student.username}")
-            if status:
-                Attendance.objects.update_or_create(
-                    student=student,
-                    date=selected_date,
-                    defaults={"status": status}
-                )
-        messages.success(request, f"Attendance saved for {selected_date}.")
-        return redirect(f"{reverse('mark_attendance')}?date={selected_date}")
-
-    context = {
-        'students': students,
-        'selected_date': selected_date,
-        'existing': existing,
-    }
-    return render(request, 'students/mark_attendance.html', context)
 
 @login_required
 def course_list(request):
