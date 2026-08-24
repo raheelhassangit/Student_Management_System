@@ -18,6 +18,7 @@ class AddStudent(forms.ModelForm):
             'gender',
             'phone',
             'email',
+            'course',
         ]
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
