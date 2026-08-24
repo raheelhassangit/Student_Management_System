@@ -123,19 +123,20 @@
                   {% endif %}
                 </td>
                 <td>
-  <a href="{% url 'student_profile' student.username %}" class="text-blue-600 font-semibold hover:underline">
-    {{ student.name }}
-  </a>
-</td>
+                  <a href="{% url 'student_profile' student.username %}" class="text-blue-600 font-semibold hover:underline">
+                    {{ student.name }}
+                  </a>
+                </td>
                 <td>{{ student.name }}</td>
                 <td>{{ student.father_name }}</td>
                 <td>{{ student.roll_no }}</td>
                 <td>
                   {% if student.course %}
-                  <span class="badge">{{ student.course.name }}</span>
-                  {% else %}
-                    <span class="text-slate-400 text-xs">Unassigned</span>
+                    <span class="badge">{{ student.course.code }}</span>
+                  {%  else %}
+                    <span class="text-slate-400 text-xs">No course</span>
                   {% endif %}
+                  <span class="text-slate-500 text-xs ml-1">{{ student.class_name }}</span>
                 </td>
                 <td>{{ student.gender }}</td>
                 <td>{{ student.date_of_birth }}</td>
