@@ -130,6 +130,35 @@ def dashboard(request):
     return render(request, 'students/dashboard.html', context)
 
 @login_required
+def mark_attendance(request):
+    selected_date = request.GET.get('date') or request.POST.get('date') or timezone.now().date().isoformat()
+    students = Student.objects.all().order_by('roll_no')
+
+    existing = {
+        a.student_id: a.status
+        for a in Attendance.objects.filter(date=selected_date)
+    }
+
+    if request.method == "POST":
+        for student in students:
+            status = request.POST.get(f"status_{student.username}")
+            if status:
+                Attendance.objects.update_or_create(
+                    student=student,
+                    date=selected_date,
+                    defaults={"status": status}
+                )
+        messages.success(request, f"Attendance saved for {selected_date}.")
+        return redirect(f"{reverse('mark_attendance')}?date={selected_date}")
+
+    context = {
+        'students': students,
+        'selected_date': selected_date,
+        'existing': existing,
+    }
+    return render(request, 'students/mark_attendance.html', context)
+
+@login_required
 def course_list(request):
     courses = Course.objects.all()
     return render(request, 'students/course_list.html', {'courses': courses})
