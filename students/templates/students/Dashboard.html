@@ -33,7 +33,7 @@
       <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5zM6 12v5c0 1 3 3 6 3s6-2 6-3v-5"/></svg>
     </div>
     <p class="text-2xl font-bold text-slate-800">{{ by_class|length }}</p>
-    <p class="text-sm text-slate-500">Total Classes</p>
+    <p class="text-sm text-slate-500">Total Courses</p>
   </div>
 
   <div class="bg-purple-50 border border-purple-100 rounded-xl p-5">
@@ -81,7 +81,7 @@
           {% endif %}
           <div class="min-w-0">
             <p class="text-sm font-semibold text-blue-600 truncate">{{ student.name }}</p>
-            <p class="text-xs text-slate-500 truncate">{{ student.class_name }}</p>
+            <p class="text-xs text-slate-500 truncate">{{ student.course.name|default:"Unassigned" }}</p>
           </div>
         </a>
       {% empty %}
@@ -96,7 +96,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
   <div class="bg-white border border-slate-200 rounded-xl p-6 overflow-hidden">
-    <h2 class="text-base font-bold text-slate-800 mb-4">Students by Class</h2>
+    <h2 class="text-base font-bold text-slate-800 mb-4">Students by Course</h2>
     <div class="flex items-center gap-6">
 
       <div class="w-32 h-32 flex-shrink-0">
@@ -107,7 +107,7 @@
         {% for c in by_class %}
           <div class="flex items-center gap-2 min-w-0">
             <span class="w-2.5 h-2.5 rounded-full flex-shrink-0 legend-dot"></span>
-            <span class="text-slate-600 truncate" title="{{ c.class_name }}">{{ c.class_name }}</span>
+            <span class="text-slate-600 truncate" title="{{ c.course__name }}">{{ c.course__name }}</span>
             <span class="font-semibold text-slate-800 flex-shrink-0 ml-auto">{{ c.count }}</span>
           </div>
         {% endfor %}
@@ -142,11 +142,11 @@
 <script>
   const chartColors = ['#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#ef4444'];
 
-  // Students by class — donut
+  // Students by course — donut
   new Chart(document.getElementById('classChart'), {
     type: 'doughnut',
     data: {
-      labels: [{% for c in by_class %}"{{ c.class_name }}",{% endfor %}],
+      labels: [{% for c in by_class %}"{{ c.course__name }}",{% endfor %}],
       datasets: [{
         data: [{% for c in by_class %}{{ c.count }},{% endfor %}],
         backgroundColor: chartColors,
