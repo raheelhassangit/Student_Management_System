@@ -130,7 +130,13 @@
                 <td>{{ student.name }}</td>
                 <td>{{ student.father_name }}</td>
                 <td>{{ student.roll_no }}</td>
-                <td><span class="badge">{{ student.class_name }}</span></td>
+                <td>
+                  {% if student.course %}
+                  <span class="badge">{{ student.course.name }}</span>
+                  {% else %}
+                    <span class="text-slate-400 text-xs">Unassigned</span>
+                  {% endif %}
+                </td>
                 <td>{{ student.gender }}</td>
                 <td>{{ student.date_of_birth }}</td>
                 <td>{{ student.phone }}</td>

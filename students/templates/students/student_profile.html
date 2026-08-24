@@ -21,8 +21,7 @@
 
       <div>
         <h1 class="text-xl font-bold text-white">{{ student.name }}</h1>
-        <p class="text-blue-100 text-sm mt-1">Roll No: {{ student.roll_no }} · {{ student.class_name }}</p>
-      </div>
+        <p class="text-blue-100 text-sm mt-1">Roll No: {{ student.roll_no }} · {{ student.course.name|default:"Unassigned" }}</p>      </div>
     </div>
 
     <!-- Details -->
