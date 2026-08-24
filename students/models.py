@@ -3,6 +3,20 @@ from django.core.exceptions import ValidationError
 
 
 # Create your models here.
+class Course(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=20, unique=True)
+    duration_years = models.PositiveIntegerField(default=4)
+    description = models.TextField(max_length=300, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.code} - {self.name}" 
+    
+    
 class Student(models.Model):
     username = models.CharField(max_length=100,primary_key=True)
     name = models.CharField(max_length=100)
@@ -15,6 +29,13 @@ class Student(models.Model):
         ("Male", "Male"),
         ("Female", "Female"),
         ("Other", "Other"),])    
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="students"
+    )
     phone = models.CharField(max_length=20)
     email = models.EmailField()
     address = models.TextField(max_length=200)
@@ -49,15 +70,3 @@ class Attendance(models.Model):
     def __str__(self):
         return f"{self.student.name} - {self.date} - {self.status}"    
     
-class Course(models.Model):
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=20, unique=True)
-    duration_years = models.PositiveIntegerField(default=4)
-    description = models.TextField(max_length=300, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['name']
-
-    def __str__(self):
-        return f"{self.code} - {self.name}"    
