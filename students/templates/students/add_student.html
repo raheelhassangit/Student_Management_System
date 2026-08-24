@@ -78,7 +78,33 @@
             {% for error in add_student.gender.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
           </div>
         </div>
+                <!-- class_name + gender -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label for="{{ add_student.class_name.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Class <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.class_name }}
+            {% for error in add_student.class_name.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+          <div>
+            <label for="{{ add_student.gender.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Gender <span class="text-red-600">*</span>
+            </label>
+            {{ add_student.gender }}
+            {% for error in add_student.gender.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+          </div>
+        </div>
 
+        <!-- course -->
+        <div class="mb-5">
+          <label for="{{ add_student.course.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1.5">
+            Course <span class="text-slate-500 font-normal text-xs">(optional)</span>
+          </label>
+          {{ add_student.course }}
+          {% for error in add_student.course.errors %}<span class="block text-red-600 text-xs mt-1">{{ error }}</span>{% endfor %}
+        </div>
+        
         <!-- date_of_birth + phone -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <div>
