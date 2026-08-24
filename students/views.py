@@ -93,9 +93,10 @@ def dashboard(request):
     recent_students = students.order_by('-admission_date')[:5]
 
     by_class = (
-        students.values('class_name')
-        .annotate(count=Count('username'))
-        .order_by('-count')
+    students.exclude(course__isnull=True)
+    .values('course__name')
+    .annotate(count=Count('username'))
+    .order_by('-count')
     )
 
     total_records = Attendance.objects.count()
