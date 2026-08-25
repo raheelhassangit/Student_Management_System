@@ -12,4 +12,7 @@ urlpatterns = [
     path('attendance/mark/', views.mark_attendance, name='mark_attendance'),
     path('courses/', views.course_list, name='course_list'),
     path('courses/add/', views.add_course, name='add_course'),
+    path('reports/', views.reports_home, name='reports_home'),
+    path('reports/students/', views.student_report, name='student_report'),
+    path('reports/attendance/', views.attendance_report, name='attendance_report'),
 ]
