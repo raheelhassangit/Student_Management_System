@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from dateutil.relativedelta import relativedelta
 from django.db.models.functions import TruncMonth
+from django.db.models import Q, Count
 
 # Create your views here.
 @login_required
@@ -173,3 +174,7 @@ def add_course(request):
     else:
         form = AddCourse()
     return render(request, 'students/add_course.html', {'add_course': form})
+
+@login_required
+def reports_home(request):
+    return render(request, 'students/reports_home.html')
