@@ -216,3 +216,40 @@ def student_report(request):
         'selected_gender': gender,
     }
     return render(request, 'students/student_report.html', context)
+
+@login_required
+def attendance_report(request):
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    if not start_date or not end_date:
+        today = timezone.now().date()
+        start_date = (today - datetime.timedelta(days=29)).isoformat()
+        end_date = today.isoformat()
+
+    students = Student.objects.all().order_by('name')
+
+    rows = []
+    for student in students:
+        records = student.attendances.filter(date__range=[start_date, end_date])
+        total_marked = records.count()
+        present = records.filter(status="Present").count()
+        absent = records.filter(status="Absent").count()
+        leave = records.filter(status="Leave").count()
+        rate = round((present / total_marked) * 100, 1) if total_marked else None
+
+        rows.append({
+            'student': student,
+            'total_marked': total_marked,
+            'present': present,
+            'absent': absent,
+            'leave': leave,
+            'rate': rate,
+        })
+
+    context = {
+        'rows': rows,
+        'start_date': start_date,
+        'end_date': end_date,
+    }
+    return render(request, 'students/attendance_report.html', context)
