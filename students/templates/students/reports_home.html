@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+
+<h1 class="text-xl font-bold text-slate-800 mb-1">Reports</h1>
+<p class="text-sm text-slate-500 mb-6">View student and attendance reports.</p>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl">
+
+  <a href="{% url 'student_report' %}" class="bg-white border border-slate-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-sm transition">
+    <div class="w-11 h-11 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+      <svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </div>
+    <h2 class="text-base font-bold text-slate-800 mb-1">Student Report</h2>
+    <p class="text-sm text-slate-500">Filter students by course and gender, view breakdowns.</p>
+  </a>
+
+  <a href="{% url 'attendance_report' %}" class="bg-white border border-slate-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-sm transition">
+    <div class="w-11 h-11 bg-green-50 rounded-full flex items-center justify-center mb-4">
+      <svg class="w-5 h-5 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    </div>
+    <h2 class="text-base font-bold text-slate-800 mb-1">Attendance Report</h2>
+    <p class="text-sm text-slate-500">View per-student attendance rate over a date range.</p>
+  </a>
+
+</div>
+
+{% endblock %}
