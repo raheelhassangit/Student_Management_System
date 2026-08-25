@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load tailwind_tags %}
+
+{% block title %}Attendance Report{% endblock %}
+
+{% block content %}
+
+<div class="text-sm mb-4">
+  <a href="{% url 'reports_home' %}" class="text-blue-600 hover:underline">Reports</a>
+  <span class="text-slate-400 mx-1">/</span>
+  <span class="text-slate-500">Attendance Report</span>
+</div>
+
+<h1 class="text-xl font-bold text-slate-800 mb-6">Attendance Report</h1>
+
+<!-- Filters -->
+<form method="GET" class="bg-white border border-slate-200 rounded-xl p-5 mb-6 flex flex-wrap items-end gap-4">
+  <div>
+    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Start Date</label>
+    <input type="date" name="start_date" value="{{ start_date }}"
+      class="px-3 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-blue-600">
+  </div>
+  <div>
+    <label class="block text-xs font-semibold text-slate-600 mb-1.5">End Date</label>
+    <input type="date" name="end_date" value="{{ end_date }}"
+      class="px-3 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-blue-600">
+  </div>
+  <button type="submit" class="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+    Apply
+  </button>
+</form>
+
+<!-- Table -->
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-slate-200 bg-slate-50">
+        <th class="text-left px-6 py-3 font-semibold text-slate-600">Student</th>
+        <th class="text-left px-6 py-3 font-semibold text-slate-600">Marked Days</th>
+        <th class="text-left px-6 py-3 font-semibold text-slate-600">Present</th>
+        <th class="text-left px-6 py-3 font-semibold text-slate-600">Absent</th>
+        <th class="text-left px-6 py-3 font-semibold text-slate-600">Leave</th>
+        <th class="text-left px-6 py-3 font-semibold text-slate-600">Rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr class="border-b border-slate-100">
+          <td class="px-6 py-3">
+            <a href="{% url 'student_profile' row.student.username %}" class="text-blue-600 font-medium hover:underline">{{ row.student.name }}</a>
+          </td>
+          <td class="px-6 py-3 text-slate-600">{{ row.total_marked }}</td>
+          <td class="px-6 py-3 text-slate-600">{{ row.present }}</td>
+          <td class="px-6 py-3 text-slate-600">{{ row.absent }}</td>
+          <td class="px-6 py-3 text-slate-600">{{ row.leave }}</td>
+          <td class="px-6 py-3">
+            {% if row.rate is not None %}
+              <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+                {% if row.rate >= 75 %}bg-green-100 text-green-700
+                {% elif row.rate >= 50 %}bg-amber-100 text-amber-700
+                {% else %}bg-red-100 text-red-700{% endif %}">
+                {{ row.rate }}%
+              </span>
+            {% else %}
+              <span class="text-slate-400 text-xs">No data</span>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="6" class="px-6 py-8 text-center text-slate-400">No students found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
