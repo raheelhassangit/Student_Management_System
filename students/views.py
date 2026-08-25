@@ -178,3 +178,41 @@ def add_course(request):
 @login_required
 def reports_home(request):
     return render(request, 'students/reports_home.html')
+
+@login_required
+def student_report(request):
+    students = Student.objects.all()
+
+    course_id = request.GET.get('course')
+    gender = request.GET.get('gender')
+
+    if course_id:
+        students = students.filter(course_id=course_id)
+    if gender:
+        students = students.filter(gender=gender)
+
+    total = students.count()
+
+    gender_breakdown = (
+        students.values('gender')
+        .annotate(count=Count('username'))
+        .order_by('gender')
+    )
+
+    course_breakdown = (
+        students.exclude(course__isnull=True)
+        .values('course__name')
+        .annotate(count=Count('username'))
+        .order_by('-count')
+    )
+
+    context = {
+        'students': students.order_by('name'),
+        'total': total,
+        'gender_breakdown': gender_breakdown,
+        'course_breakdown': course_breakdown,
+        'courses': Course.objects.all(),
+        'selected_course': course_id,
+        'selected_gender': gender,
+    }
+    return render(request, 'students/student_report.html', context)
